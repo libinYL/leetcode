@@ -1,4 +1,4 @@
-## Two Sum
+## Sort Array By Parity II
 
 题目 [链接](https://leetcode.com/problems/sort-array-by-parity-ii/)
 
@@ -26,6 +26,28 @@ Explanation: [4,7,2,5], [2,5,4,7], [2,7,4,5] would also have been accepted.
 
 ## 解答
 
-```C++
+借鉴了快速排序的思想
 
+```C++
+class Solution
+{
+
+    // 0 1 2 3  size = 4
+    // 偶奇偶奇
+public:
+    vector<int> sortArrayByParityII(vector<int>& A)
+    {
+        int oddInx = 0;
+        int evenInx = A.size() - 1;
+        while (oddInx < A.size() && evenInx >= 0)//控制退出条件
+        {
+            while (oddInx < A.size() && A[oddInx] % 2 == 0) { oddInx += 2; };//i寻找下一个奇数
+            while (evenInx >= 0 && A[evenInx] % 2 != 0) { evenInx -= 2; }//j寻找下一个偶数
+            if (oddInx < A.size() && evenInx >= 0)
+                swap(A[oddInx], A[evenInx]);
+        }
+
+        return A;
+    }
+};
 ```
