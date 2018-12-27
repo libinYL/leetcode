@@ -6,7 +6,7 @@
 
 ## 题目描述
 
-形如 “discuss.leetcode.com” 域名包含很多子域。顶级：“com", 下一级：“leetcode.com”，最低级：“discuss.leetcode.com”。当我们访问一个像 “discuss.leetcode.com” 的域时，我们也会隐含地访问 “leetcode.com” 和“com”。
+形如 “discuss.leetcode.com” 域名包含很多子域。它的顶级是：“com", 次级是“leetcode.com”，最低级：“discuss.leetcode.com”。当我们访问一个像 “discuss.leetcode.com” 的域时，我们事实上也会隐含地访问 “leetcode.com” 和“com”。
 
 现在，我们定义一种数据格式：“count-paired domain”。其中，“count” 代表此域被访问的次数，它后面跟一个空格，再后边是地址。例如 “9001 discuss.leetcode.com”。
 
@@ -44,5 +44,43 @@ We will visit "google.mail.com" 900 times, "yahoo.com" 50 times, "intel.mail.com
 ## 解答
 
 ```C++
+#include<vector>
+#include<map>
+#include<iostream>
 
+using namespace std;
+class Solution
+{
+public:
+    vector<string> subdomainVisits(vector<string>& cpdomains)
+    {
+        map<string,int> m;
+        for (int i = 0; i < cpdomains.size(); i++)
+        {
+            map<string, int>::iterator it_map = m.begin();
+            it_map = m.find(cpdomains.at(i));
+            if (it_map == m.end())
+            {
+
+            }
+                
+            
+            string domin = cpdomains.at(i);
+            int idx1 = domin.find_first_of('.');
+            string firstDomin = domin.substr(0,idx1);
+            
+            cout << firstDomin.c_str();
+        }
+        return cpdomains;
+    }
+};
+
+
+int main()
+{
+    Solution s;
+    vector<string> v{ "900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org" };
+    s.subdomainVisits(v);
+    getchar();
+}
 ```
