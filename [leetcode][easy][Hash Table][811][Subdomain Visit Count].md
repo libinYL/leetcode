@@ -47,6 +47,7 @@ We will visit "google.mail.com" 900 times, "yahoo.com" 50 times, "intel.mail.com
 #include<vector>
 #include<map>
 #include<iostream>
+#include<string>
 
 using namespace std;
 class Solution
@@ -54,27 +55,69 @@ class Solution
 public:
     vector<string> subdomainVisits(vector<string>& cpdomains)
     {
-        map<string,int> m;
+        map<string, int> m;
         for (int i = 0; i < cpdomains.size(); i++)
         {
-            map<string, int>::iterator it_map = m.begin();
-            it_map = m.find(cpdomains.at(i));
-            if (it_map == m.end())
+            unsigned int count = stoi(cpdomains.at(i).substr(0, cpdomains.at(i).find(" ")));
+            string domin = cpdomains.at(i).substr(cpdomains.at(i).find(" ")+1, cpdomains.at(i).size());
+            //存入顶级域名
+            if (m.find(domin) != m.end())//存在此域名
             {
-
+                m[domin]+=count;
             }
-                
+            else
+            {
+                m[domin] = count;
+            }
+
+            //分割次级域名
             
-            string domin = cpdomains.at(i);
-            int idx1 = domin.find_first_of('.');
-            string firstDomin = domin.substr(0,idx1);
+            int idx1 = domin.find('.');
+            string secondDomin = domin.substr(idx1+1, domin.size());
+
+            if (m.find(secondDomin) != m.end())
+            {
+                m[secondDomin]+= count;
+            }
+            else
+            {
+                m[secondDomin] = count;
+            }
+
+            int idx2 = secondDomin.find('.');
+            if (idx2 == -1)
+            {
+                continue;
+            }
+            string thirdDomin = secondDomin.substr(idx2 + 1, secondDomin.size());
             
-            cout << firstDomin.c_str();
+            if (m.find(thirdDomin) != m.end())
+            {
+                m[thirdDomin]+=count;
+            }
+            else
+            {
+                m[thirdDomin] = count;
+            }
+
+
         }
-        return cpdomains;
+        map<string, int>::iterator it = m.begin();
+        vector<string> result;
+
+        while (it != m.end())
+        {
+            string str_v = to_string(it->second);
+            str_v += " ";
+            str_v+=it->first;
+            result.push_back(str_v);
+            it++;
+        }
+
+        return result;
     }
 };
-
+        
 
 int main()
 {
