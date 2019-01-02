@@ -6,7 +6,7 @@
 
 ## 题目描述
 
-形如 “discuss.leetcode.com” 域名包含很多子域。顶级：“com", 下一级：“leetcode.com”，最低级：“discuss.leetcode.com”。当我们访问一个像 “discuss.leetcode.com” 的域时，我们也会隐含地访问 “leetcode.com” 和“com”。
+形如 “discuss.leetcode.com” 域名包含很多子域。它的顶级是：“com", 次级是“leetcode.com”，最低级：“discuss.leetcode.com”。当我们访问一个像 “discuss.leetcode.com” 的域时，我们事实上也会隐含地访问 “leetcode.com” 和“com”。
 
 现在，我们定义一种数据格式：“count-paired domain”。其中，“count” 代表此域被访问的次数，它后面跟一个空格，再后边是地址。例如 “9001 discuss.leetcode.com”。
 
@@ -44,5 +44,86 @@ We will visit "google.mail.com" 900 times, "yahoo.com" 50 times, "intel.mail.com
 ## 解答
 
 ```C++
+#include<vector>
+#include<map>
+#include<iostream>
+#include<string>
 
+using namespace std;
+class Solution
+{
+public:
+    vector<string> subdomainVisits(vector<string>& cpdomains)
+    {
+        map<string, int> m;
+        for (int i = 0; i < cpdomains.size(); i++)
+        {
+            unsigned int count = stoi(cpdomains.at(i).substr(0, cpdomains.at(i).find(" ")));
+            string domin = cpdomains.at(i).substr(cpdomains.at(i).find(" ")+1, cpdomains.at(i).size());
+            //存入顶级域名
+            if (m.find(domin) != m.end())//存在此域名
+            {
+                m[domin]+=count;
+            }
+            else
+            {
+                m[domin] = count;
+            }
+
+            //分割次级域名
+            
+            int idx1 = domin.find('.');
+            string secondDomin = domin.substr(idx1+1, domin.size());
+
+            if (m.find(secondDomin) != m.end())
+            {
+                m[secondDomin]+= count;
+            }
+            else
+            {
+                m[secondDomin] = count;
+            }
+
+            int idx2 = secondDomin.find('.');
+            if (idx2 == -1)
+            {
+                continue;
+            }
+            string thirdDomin = secondDomin.substr(idx2 + 1, secondDomin.size());
+            
+            if (m.find(thirdDomin) != m.end())
+            {
+                m[thirdDomin]+=count;
+            }
+            else
+            {
+                m[thirdDomin] = count;
+            }
+
+
+        }
+        map<string, int>::iterator it = m.begin();
+        vector<string> result;
+
+        while (it != m.end())
+        {
+            string str_v = to_string(it->second);
+            str_v += " ";
+            str_v+=it->first;
+            result.push_back(str_v);
+            it++;
+        }
+
+        return result;
+    }
+};
+        
+
+int main()
+{
+    Solution s;
+    vector<string> v{ "900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org" };
+    s.subdomainVisits(v);
+    getchar();
+}
 ```
