@@ -70,3 +70,17 @@ public:
 ```
 
 优化点：事实上不必都与root的值做比较，每个节点只需与其父节点做比较即可。这样就避免了全局变量。
+
+```C++
+class Solution
+{
+public:
+    bool isUnivalTree(TreeNode* root)
+    {
+        bool isLeftUnival = (root->left==NULL||(root->left->val==root->val&&isUnivalTree(root->left)));
+        bool isRightUnival = (root->right==NULL||(root->right->val==root->val&&isUnivalTree(root->right)));
+        
+        return isLeftUnival&&isRightUnival;
+    }
+};
+```
